@@ -1,4 +1,4 @@
-package ocl2sparksee;
+package com.sparsity.ocl2sparksee.visitors;
 
 import com.sparsity.ocl.ast.BooleanLiteralExp;
 import com.sparsity.ocl.ast.CallExp;
