@@ -131,6 +131,10 @@ public class OCL2SparkseeVisitor implements GenericOclAstVisitor<SQAExpression, 
 
 			return new DataTransformationExp(previousOps, name, args);
 		}
+		else if(op.equals("collect")){
+			
+		}
+		
 
 		return null;
 	}
@@ -232,6 +236,30 @@ public class OCL2SparkseeVisitor implements GenericOclAstVisitor<SQAExpression, 
 
 			if (op.equals("EQ")) {
 				return new BinaryOperation(sourceResult, argsResult.get(0), BinaryOperationType.EQ);
+			}
+			else if(op.equals("subSequence")){
+				List<TableOperationExp> sources = new LinkedList<TableOperationExp>();
+				sources.add((TableOperationExp) sourceResult);
+				return new DataTransformationExp(sources, "SLICE", argsResult);
+			}
+			else if(op.equals("union")){
+				List<TableOperationExp> sources = new LinkedList<TableOperationExp>();
+				sources.add((TableOperationExp) sourceResult);
+				if(argsResult != null){
+					for(SQAExpression arg: argsResult){
+						sources.add((TableOperationExp) arg);
+					}
+				}
+				return new DataTransformationExp(sources, "UNION", null);
+			}
+			else if(op.equals("sortedBy")){
+				List<TableOperationExp> sources = new LinkedList<TableOperationExp>();
+				sources.add((TableOperationExp) sourceResult);
+				
+				argsResult = new LinkedList<SQAExpression>();
+				//TODO: use ColumnOrder and infer the column headers before
+				
+				return new DataTransformationExp(sources, "SORT", argsResult);
 			}
 
 		}
